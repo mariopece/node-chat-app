@@ -28,11 +28,12 @@ io.on('connection', (socket) => {
   //     createdAt: 123
   // });
 
-  socket.on('createMessage', (message) => {
+  //server side event acknowledgement sent to client (browser)
+  socket.on('createMessage', (message, callback) => {
     console.log('Created message', message);
     //io.emit emits event to every connection
     io.emit('newMessage', generateMessage(message.from, message.text));
-
+    callback('This is from the server');
     //broadcasting - emiting an event to everyone exept specific user
     //sockets tells to which user event will not be emitted
     // socket.broadcast.emit('newMessage', {
