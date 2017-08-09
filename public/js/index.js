@@ -7,6 +7,7 @@ socket.on('connect', function() {
   //   text: 'hello!'
   // });
 
+
 });
 
 socket.on('disconnect', function(){
