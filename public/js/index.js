@@ -8,19 +8,23 @@ socket.on('disconnect', function(){
 });
 
 socket.on('newMessage', function(message){
-  console.log('newMessage', message);
+  //console.log('newMessage', message);
+  var formattedTime = moment(message.createdAt).format('h:mm a');
+
   var li = jQuery('<li></li>');
-  li.text(`${message.from}: ${message.text}`);
+  li.text(`${message.from} ${formattedTime}: ${message.text}`);
 
   jQuery('#messages').append(li);
 });
 
 socket.on('newLocationMessage', function(message){
-    var li = jQuery('<li></li>');
+    var formattedTime = moment(message.createdAt).format('h:mm a');
+
+	var li = jQuery('<li></li>');
     //_blank tells to the browser to open a new tab instead of redirecting within current one
     var a = jQuery('<a target="_blank">My current location</a>');
 
-    li.text(`${message.from}: `);
+    li.text(`${message.from} ${formattedTime}: `);
     //query method. One argument fetch the value, when 2 arguments value is set
     a.attr('href', message.url);
     li.append(a);
