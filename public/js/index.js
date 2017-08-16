@@ -8,27 +8,44 @@ socket.on('disconnect', function(){
 });
 
 socket.on('newMessage', function(message){
-  //console.log('newMessage', message);
+  //implementing mustache.js template
   var formattedTime = moment(message.createdAt).format('h:mm a');
+  var template = jQuery('#message-template').html();
+  var html = Mustache.render(template, {
+    text: message.text,
+    from: message.from,
+    createdAt: formattedTime
+  });
 
-  var li = jQuery('<li></li>');
-  li.text(`${message.from} ${formattedTime}: ${message.text}`);
+  jQuery('#messages').append(html);
 
-  jQuery('#messages').append(li);
+  // //console.log('newMessage', message);
+  // var formattedTime = moment(message.createdAt).format('h:mm a');
+  // var li = jQuery('<li></li>');
+  // li.text(`${message.from} ${formattedTime}: ${message.text}`);
+  // jQuery('#messages').append(li);
 });
 
 socket.on('newLocationMessage', function(message){
     var formattedTime = moment(message.createdAt).format('h:mm a');
+    var template = jQuery('#location-message-template').html();
+    var html = Mustache.render(template, {
+      from: message.from,
+      createdAt: formattedTime,
+      url: message.url
+    });
 
-	var li = jQuery('<li></li>');
-    //_blank tells to the browser to open a new tab instead of redirecting within current one
-    var a = jQuery('<a target="_blank">My current location</a>');
+    jQuery('#messages').append(html);
 
-    li.text(`${message.from} ${formattedTime}: `);
-    //query method. One argument fetch the value, when 2 arguments value is set
-    a.attr('href', message.url);
-    li.append(a);
-    jQuery('#messages').append(li);
+	  // var li = jQuery('<li></li>');
+    // //_blank tells to the browser to open a new tab instead of redirecting within current one
+    // var a = jQuery('<a target="_blank">My current location</a>');
+    //
+    // li.text(`${message.from} ${formattedTime}: `);
+    // //query method. One argument fetch the value, when 2 arguments value is set
+    // a.attr('href', message.url);
+    // li.append(a);
+    // jQuery('#messages').append(li);
 });
 
 //event acknowledgement by adding callback function
