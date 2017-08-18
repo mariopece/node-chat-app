@@ -57,9 +57,15 @@ io.on('connection', (socket) => {
 
   //server side event acknowledgement sent to client (browser)
   socket.on('createMessage', (message, callback) => {
-    console.log('Created message', message);
+    //console.log('Created message', message);
     //io.emit emits event to every connection
-    io.emit('newMessage', generateMessage(message.from, message.text));
+
+    var user = users.getUser(socket.id);
+
+    if (user && isRealString(message.text)) {
+      io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
+    }
+
     callback();
     //broadcasting - emiting an event to everyone exept specific user
     //sockets tells to which user event will not be emitted
@@ -71,7 +77,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('createLocationMessage', (coords) => {
-    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
+    var user = users.getUser(socket.id);
+
+    if(user) {
+        io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude));
+    }
   });
 
   socket.on('disconnect', () => {
