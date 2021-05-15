@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
     socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
 
     //new user joined
-    socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined`));
+    socket.broadcast.to(params.room).emit('newMessage', generateMessage({ auth:'Admin', msg: params}));
 
     callback();
   });
@@ -63,7 +63,7 @@ io.on('connection', (socket) => {
     var user = users.getUser(socket.id);
 
     if (user && isRealString(message.text)) {
-      io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
+      io.to(user.room).emit('newMessage', generateMessage({ auth:'Admin', msg: message, user: user}));
     }
 
     callback();
@@ -90,7 +90,7 @@ io.on('connection', (socket) => {
 
     if (user){
       io.to(user.room).emit('updateUserList', users.getUserList(user.room));
-      io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left`));
+      io.to(user.room).emit('newMessage', generateMessage({ auth:'Admin', msg: `${user.name} has left`, user: user}));
     }
   });
 });
