@@ -63,7 +63,7 @@ io.on('connection', (socket) => {
 
     var user = users.getUser(socket.id);
 
-      io.to(user.room).emit('spawnplayer', generateMessage({ auth:'Admin', msg: message, user: user}));
+      io.to(user.room).emit('spawnplayer', generateMessage({ auth:'Admin', msg: 'new user', user: user}));
     
 
     callback();
