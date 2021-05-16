@@ -18,11 +18,6 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
   console.log('New user connected');
 
-  // socket.emit('newMessage', {
-  //     from: 'abc',
-  //     text: 'def',
-  //     createdAt: 123
-  // });
 
   socket.on('join', (params, callback) => {
     if (!isRealString(params.name) || !isRealString(params.room)) {
@@ -35,17 +30,6 @@ io.on('connection', (socket) => {
 
     io.to(params.room).emit('updateUserList', users.getUserList(params.room));
 
-    //socket.leave('The Office Fans');
-
-    // io.emiting - sending to everyone
-    // socket.broadcast.emit - sending to everyone except for current user
-    // socket.emit - emits specificly to the socket user
-
-    // io.emit -> io.to('The office fans').emit
-    // socket.broadcast.emit -> socket.broadcast.to('The office fans').emit
-    // socket.emit
-
-    //greeting
     socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
 
     //new user joined
@@ -55,11 +39,7 @@ io.on('connection', (socket) => {
   });
 
 
-  
-    //server side event acknowledgement sent to client (browser)
   socket.on('spawnplayer', (data, callback) => {
-    //console.log('Created message', message);
-    //io.emit emits event to every connection
 
     var user = users.getUser(socket.id);
 
@@ -67,21 +47,12 @@ io.on('connection', (socket) => {
     
 
     callback();
-    //broadcasting - emiting an event to everyone exept specific user
-    //sockets tells to which user event will not be emitted
-    // socket.broadcast.emit('newMessage', {
-    //   from: message.from,
-    //   text: message.text,
-    //   createdAt: new Date().getTime()
-    // });
+
   });
   
-  
-  
-  //server side event acknowledgement sent to client (browser)
+
   socket.on('createMessage', (message, callback) => {
-    //console.log('Created message', message);
-    //io.emit emits event to every connection
+
 
     var user = users.getUser(socket.id);
 
@@ -90,13 +61,7 @@ io.on('connection', (socket) => {
     }
 
     callback();
-    //broadcasting - emiting an event to everyone exept specific user
-    //sockets tells to which user event will not be emitted
-    // socket.broadcast.emit('newMessage', {
-    //   from: message.from,
-    //   text: message.text,
-    //   createdAt: new Date().getTime()
-    // });
+
   });
 
   socket.on('createLocationMessage', (coords) => {
