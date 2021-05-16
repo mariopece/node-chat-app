@@ -63,9 +63,8 @@ io.on('connection', (socket) => {
 
     var user = users.getUser(socket.id);
 
-    if (user && isRealString(message.text)) {
       io.to(user.room).emit('spawnplayer', generateMessage({ auth:'Admin', msg: message, user: user}));
-    }
+    
 
     callback();
     //broadcasting - emiting an event to everyone exept specific user
