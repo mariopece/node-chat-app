@@ -113,7 +113,8 @@ io.on('connection', (socket) => {
 
     if (user){
       io.to(user.room).emit('updateUserList', users.getUserList(user.room));
-      io.to(user.room).emit('newMessage', generateMessage({ auth:'Admin', msg: `${user.name} has left`, user: user}));
+      io.to(user.room).emit('removePlayer', generateMessage({ auth:'Admin', msg: `${user.name} has left`, user: user, id: socket.id}));
+      
     }
   });
 });
