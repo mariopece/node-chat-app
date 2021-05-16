@@ -55,6 +55,30 @@ io.on('connection', (socket) => {
   });
 
 
+  
+    //server side event acknowledgement sent to client (browser)
+  socket.on('spawnplayer', (data, callback) => {
+    //console.log('Created message', message);
+    //io.emit emits event to every connection
+
+    var user = users.getUser(socket.id);
+
+    if (user && isRealString(message.text)) {
+      io.to(user.room).emit('spawnplayer', generateMessage({ auth:'Admin', msg: message, user: user}));
+    }
+
+    callback();
+    //broadcasting - emiting an event to everyone exept specific user
+    //sockets tells to which user event will not be emitted
+    // socket.broadcast.emit('newMessage', {
+    //   from: message.from,
+    //   text: message.text,
+    //   createdAt: new Date().getTime()
+    // });
+  });
+  
+  
+  
   //server side event acknowledgement sent to client (browser)
   socket.on('createMessage', (message, callback) => {
     //console.log('Created message', message);
